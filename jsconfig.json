@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "Utils/*": ["src/_utils/*"],
+      "Constant/*": ["src/_constants/*"],
+      "Hooks/*": ["src/presentations/hooks/*"],
+      "Layouts/*": ["src/presentations/layouts/*"],
+      "Modules/*": ["src/presentations/modules/*"],
+      "Components/*": ["src/presentations/components/*"],
+      "@/*": ["src/*"],
+      "~/*": ["shared/src/*"]
+    },
+    "module": "commonjs",
+    "target": "es6"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "shared/src/*"]
+}
