@@ -1,19 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import React, { useEffect, useState } from 'react'
 import { Link as RouterLink, useParams, useHistory } from 'react-router-dom'
-import { SchemaOf, object, string } from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { Breadcrumbs, Grid, Typography, Link, Card, CardContent, CardHeader, Button } from '@mui/material'
+import { Breadcrumbs, Grid, Typography, Link, Button } from '@mui/material'
 
-import { InputField } from 'Components/form-ui/input-field'
 import LoadingPage from 'Components/common/loadable/LoadingPage'
 import { useAppDispatch, useAppSelector } from 'Hooks/useStore'
 import { ChevronRightIcon } from '@/presentations/icons/ChevronRight'
 import { getStoreById } from '~/domain/adapters/redux/entities/store'
 import { StoreLayout } from './StoreLayout'
 import { VehicleList } from './components/VehicleList'
+import { StoreForm } from './components/StoreForm'
 
-interface FormValues {
+export interface FormValues {
   name: string
   description: string
   city: string
@@ -21,40 +18,20 @@ interface FormValues {
   phoneNumber: string
 }
 
-const formSchema: SchemaOf<FormValues> = object({
-  name: string().required('Name is required'),
-  description: string().default(''),
-  city: string().required('City is required'),
-  address: string().required('Address is required'),
-  phoneNumber: string().required('PhoneNumber is required'),
-})
-
 export const StoreDetail: React.FC = () => {
   const params = useParams<{ id: string }>()
   const history = useHistory()
   const dispatch = useAppDispatch()
   const storeInfo = useAppSelector((store) => store.entities.store.entityInfo)
+  const vehicle = useAppSelector((store) => store.entities.vehicle)
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const defaultValues = useMemo(
-    () => ({
-      name: storeInfo?.name || '',
-      description: storeInfo?.description || '',
-      city: storeInfo?.city || '',
-      address: storeInfo?.address || '',
-      phoneNumber: storeInfo?.phoneNumber || '',
-    }),
-    [storeInfo],
-  )
-
-  const methods = useForm<FormValues>({ resolver: yupResolver(formSchema) })
-  const { handleSubmit, reset } = methods
-
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit = async (_data: FormValues) => {
     try {
-      console.log(data)
+      const data = { ..._data, vehicles: vehicle.result.map((id) => vehicle.entities[id]) }
       // To do submit
+      console.log(data)
     } catch (error) {
       console.log(error)
     }
@@ -63,11 +40,10 @@ export const StoreDetail: React.FC = () => {
   useEffect(() => {
     const getStore = async () => {
       await dispatch(getStoreById(+params.id))
-      reset(defaultValues)
       setIsLoading(false)
     }
     getStore()
-  }, [dispatch, reset, params.id, defaultValues])
+  }, [dispatch, params.id])
 
   if (isLoading || !storeInfo) {
     return <LoadingPage />
@@ -92,31 +68,7 @@ export const StoreDetail: React.FC = () => {
       </Grid>
       <Grid container justifyContent="space-between" spacing={1}>
         <Grid item xs={4} container direction="column">
-          <FormProvider {...methods}>
-            <form autoComplete="off" id="store-info-form" onSubmit={handleSubmit(onSubmit)}>
-              <Grid container direction="column" rowSpacing={1}>
-                <Grid item>
-                  <Card variant="outlined">
-                    <CardHeader title="General" />
-                    <CardContent>
-                      <InputField name="name" label="Name" />
-                      <InputField name="description" label="Description" />
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item>
-                  <Card variant="outlined">
-                    <CardHeader title="Contact" />
-                    <CardContent>
-                      <InputField name="phoneNumber" label="Phone" />
-                      <InputField name="address" label="Address" />
-                      <InputField name="city" label="City" />
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </form>
-          </FormProvider>
+          <StoreForm handleSubmit={onSubmit} storeInfo={storeInfo} />
         </Grid>
         <Grid item xs={8}>
           <VehicleList isLoading={isLoading} />

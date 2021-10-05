@@ -6,7 +6,7 @@ export interface LoginPayload {
 }
 export interface AuthenticationResponse {
   id: number
-  email: string,
+  email: string
   scope: string
   token: string
   emailVerified: boolean

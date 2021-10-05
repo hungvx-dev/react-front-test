@@ -10,5 +10,5 @@ export enum LOCAL_STORAGE_KEYS {
   ACCESS_TOKEN = 'accessToken',
   REFRESH_TOKEN = 'refreshToken',
   EXPIRED_TIME = 'tokenExpiredTime',
-  THEME = 'theme'
+  THEME = 'theme',
 }

@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { GridColumns, GridEditRowsModel } from '@mui/x-data-grid'
-import { Grid } from '@mui/material'
+import React, { useMemo, useState } from 'react'
+import { GridCellEditCommitParams, GridColumns } from '@mui/x-data-grid'
+
 import { useAppDispatch, useAppSelector } from 'Hooks/useStore'
 import { DataTable } from 'Components/data-table'
+import actionVehicle from '~/domain/adapters/redux/entities/vehicle/vehicle'
 
 const columnsVehicle: GridColumns = [
   { field: 'name', headerName: 'Name', sortable: true, flex: 0.7, minWidth: 150 },
@@ -24,6 +25,7 @@ interface PropsType {
 }
 
 export const VehicleList: React.FC<PropsType> = ({ isLoading }) => {
+  const dispatch = useAppDispatch()
   const vehicle = useAppSelector((store) => store.entities.vehicle)
 
   const rows = useMemo(() => vehicle.result.map((id) => vehicle.entities[id]), [vehicle])
@@ -34,6 +36,12 @@ export const VehicleList: React.FC<PropsType> = ({ isLoading }) => {
   const handlePageSizeChange = (pageSize: number) => {
     setPerPage(pageSize)
   }
+  const handleCellEditCommit = React.useCallback(
+    ({ id, field, value }: GridCellEditCommitParams) => {
+      dispatch(actionVehicle.updateEntity({ id: +id, field, value: value as never }))
+    },
+    [dispatch],
+  )
 
   return (
     <DataTable
@@ -43,7 +51,7 @@ export const VehicleList: React.FC<PropsType> = ({ isLoading }) => {
       loading={isLoading}
       paginationMode="client"
       rowCount={vehicle.result.length}
-      // onEditCellPropsChange={handleCellEditPropsChange}
+      onCellEditCommit={handleCellEditCommit}
       onPageSizeChange={handlePageSizeChange}
     />
   )

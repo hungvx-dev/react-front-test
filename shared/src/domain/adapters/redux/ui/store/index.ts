@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type State = {
-  pagination: Pagination,
+  pagination: Pagination
 }
 
 const initialState: State = {

@@ -1,7 +1,7 @@
 import { Store } from '~/domain/models/entities/store'
 import { ResponseApi } from '~/_libs/request'
 
-export interface FetchParams extends Pagination { }
+export interface FetchParams extends Pagination {}
 
 export interface Information {
   label: string

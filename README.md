@@ -1,9 +1,3 @@
-1. [Requirements](#cequirements)
-2. [Clone](#clone)
-3. [Install](#install)
-4. [Start & watch](#start)
-5. [Build](#build)
-
 # Project React front test
 
 ## Requirements
@@ -27,26 +21,12 @@ below.
 
 ## Clone
 
-    $ git clone git@bitbucket.org:team-card/mc-web.git
-    $ cd mc-web
-
-### Implement - My card sharing
-
-    $ git submodule init
-    $ git submodule add -f git@bitbucket.org:team-card/mc-data.git shared
-    $ git config -f .gitmodules submodule.shared.branch develop
-    $ git submodule foreach --recursive git pull origin develop
-
-### Ignore new commits for git submodule
-
-    $ git submodule update --init --force --remote
-
----
+    $ git clone git@github.com:hungvx-dev/react-front-test.git && cd react-front-test
 
 ## Install
 
     $ yarn install
-    $ cd src/shared
+    $ cd shared
     $ yarn install
 
 ### Configure app
@@ -73,6 +53,6 @@ To Visit App:
 
 ## Simple build for production
 
-In root directory `src/app/web`
+In root directory ``
 
     $ yarn build

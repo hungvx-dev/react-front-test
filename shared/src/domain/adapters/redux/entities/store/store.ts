@@ -33,7 +33,7 @@ const { actions, reducer } = createSlice({
       state.entityInfo = action.payload
     },
     deleteEntity: (state, action: PayloadAction<number>) => {
-      state.result = state.result.filter(id => id !== action.payload)
+      state.result = state.result.filter((id) => id !== action.payload)
       delete state.entities[action.payload]
     },
   },

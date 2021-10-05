@@ -19,13 +19,23 @@ type UpdateEntities = {
   result: number[]
 }
 
+type UpdateEntity = {
+  id: number
+  field: string
+  value: never
+}
+
 const { actions, reducer } = createSlice({
   name: 'vehicle',
   initialState,
   reducers: {
-    updateEntities: (state, action: PayloadAction<UpdateEntities>) => {
-      state.entities = action.payload.entities?.vehicles || {}
-      state.result = action.payload.result
+    updateEntities: (state, { payload }: PayloadAction<UpdateEntities>) => {
+      state.entities = payload.entities?.vehicles || {}
+      state.result = payload.result
+    },
+    updateEntity: (state, { payload }: PayloadAction<UpdateEntity>) => {
+      const { id, value, field } = payload
+      state.entities[id][field as keyof Vehicle] = value
     },
   },
 })
